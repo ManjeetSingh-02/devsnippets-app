@@ -11,6 +11,7 @@ export function initDB() {
     title TEXT NOT NULL,
     code TEXT NOT NULL,
     language TEXT NOT NULL,
+    tags TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 }
