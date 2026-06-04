@@ -8,7 +8,7 @@ import { Uniwind, useUniwind } from 'uniwind';
 // type for theme
 type Theme = 'system' | 'light' | 'dark';
 
-// function to render the settings screen
+// function to render the appearance options
 export default function Appearance() {
   // state to manage the bottom sheet open state
   const [isOpen, setIsOpen] = useState(false);
