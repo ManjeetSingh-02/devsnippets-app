@@ -1,6 +1,7 @@
 // internal-imports
 import SafeScreen from '@/components/SafeScreen';
 import Appearance from '@/components/Appearance';
+import StorageManagement from '@/components/StorageManagement';
 
 // external-imports
 import { Typography } from 'heroui-native';
@@ -18,6 +19,7 @@ export default function Settings() {
 
         <View className="px-4 gap-6">
           <Appearance />
+          <StorageManagement />
         </View>
       </View>
     </SafeScreen>
