@@ -1,5 +1,6 @@
 // internal-imports
 import SafeScreen from '@/components/SafeScreen';
+import Appearance from '@/components/Appearance';
 
 // external-imports
 import { Typography } from 'heroui-native';
@@ -9,8 +10,15 @@ import { View } from 'react-native';
 export default function Settings() {
   return (
     <SafeScreen>
-      <View className="flex-1 items-center justify-center bg-white dark:bg-black">
-        <Typography>Settings</Typography>
+      <View className="flex-1">
+        <View className="px-5 pt-8 pb-6">
+          <Typography.Heading type="h1">Settings</Typography.Heading>
+          <Typography.Paragraph>Customize your snippet manager</Typography.Paragraph>
+        </View>
+
+        <View className="px-4 gap-6">
+          <Appearance />
+        </View>
       </View>
     </SafeScreen>
   );
