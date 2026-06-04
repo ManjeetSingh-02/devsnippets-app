@@ -1,11 +1,12 @@
 // external-imports
 import { Tabs } from 'expo-router';
 import { Bolt, Code, House } from 'lucide-react-native';
-import { useColorScheme } from 'react-native';
+import { useUniwind } from 'uniwind';
 
 // function to render tab layout
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  // get the current theme from uniwind
+  const { theme } = useUniwind();
 
   return (
     <Tabs
@@ -13,10 +14,10 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colorScheme === 'dark' ? 'black' : 'white',
+          backgroundColor: theme === 'dark' ? 'black' : 'white',
           borderTopColor: 'gray',
         },
-        tabBarActiveTintColor: colorScheme === 'dark' ? 'white' : 'black',
+        tabBarActiveTintColor: theme === 'dark' ? 'white' : 'black',
         tabBarInactiveTintColor: 'gray',
       }}
     >
