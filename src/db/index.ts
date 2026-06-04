@@ -18,3 +18,11 @@ export async function initDB() {
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 }
+
+export async function deleteAllSnippets() {
+  // get the database connection
+  const db = await database;
+
+  // delete all snippets from the database
+  await db.execAsync('DELETE FROM snippets');
+}
