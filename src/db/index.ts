@@ -24,22 +24,23 @@ export async function getSnippetsData() {
   // get the database connection
   const db = await database;
 
-  // execute the query to count all snippets
-  const result = await db.getFirstAsync<{ totalSnippets: number }>(
-    'SELECT COUNT(*) as totalSnippets FROM snippets'
+  // execute the query to get all snippets
+  const [query] = await db.getAllAsync<{
+    totalSnippets: number;
+    favouriteSnippets: number;
+  }>(
+    `SELECT COUNT(*) as totalSnippets, COALESCE(SUM(favourite), 0) as favouriteSnippets FROM snippets`
   );
-
-  // get the total snippets count from the query result
-  const totalSnippets = result?.totalSnippets ?? 0;
-
-  // if there are no snippets, return 0 for both total snippets and storage used
-  if (!totalSnippets) return { totalSnippets: 0, favouriteSnippets: 0, storageUsed: 0 };
 
   // get the file info of the database to calculate storage used
   const dbFileInfo = await db.serializeAsync();
 
-  // return the total snippets count and storage used
-  return { totalSnippets, favouriteSnippets: 0, storageUsed: dbFileInfo.byteLength };
+  // return the calculated data
+  return {
+    totalSnippets: query!.totalSnippets,
+    favouriteSnippets: query!.favouriteSnippets,
+    storageUsed: dbFileInfo.byteLength,
+  };
 }
 
 export async function deleteAllSnippets() {
