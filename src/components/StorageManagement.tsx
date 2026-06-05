@@ -17,12 +17,11 @@ import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { useUniwind } from 'uniwind';
 
+// type-imports
+import type { SnippetsCount } from '@/types/snippet';
+
 // type for the snippets data
-type SnippetsData = {
-  totalSnippets: number;
-  favouriteSnippets: number;
-  storageUsed: number;
-};
+type SnippetsData = SnippetsCount & { storageUsed: number };
 
 // function to render the storage management options
 export default function StorageManagement() {
