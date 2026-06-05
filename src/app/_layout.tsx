@@ -1,6 +1,6 @@
 // internal-imports
 import '@/global.css';
-import { initDB } from '@/db/index';
+import { initializeApp } from '@/utils/initialize-app';
 
 // external-imports
 import { Stack } from 'expo-router';
@@ -13,7 +13,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 export default function RootLayout() {
   // useEffect to perform startup tasks
   useEffect(() => {
-    void initDB();
+    void initializeApp();
   }, []);
 
   return (
