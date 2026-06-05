@@ -74,10 +74,13 @@ export async function createSnippet(data: Snippet) {
   const db = await database;
 
   // insert the new snippet into the database
-  await db.runAsync(
+  const query = await db.runAsync(
     `INSERT INTO snippets (title, code, language, tags, favourite) VALUES (?, ?, ?, ?, ?)`,
     [data.title, data.code, data.language, data.tags ?? null, data.favourite ? 1 : 0]
   );
+
+  // return the id of the newly created snippet
+  return query.lastInsertRowId;
 }
 
 export async function updateSnippet({ id, data }: { id: number; data: Snippet }) {
