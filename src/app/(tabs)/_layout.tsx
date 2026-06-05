@@ -1,6 +1,6 @@
 // external-imports
 import { Tabs } from 'expo-router';
-import { Bolt, Code, House } from 'lucide-react-native';
+import { Bolt, House } from 'lucide-react-native';
 import { useUniwind } from 'uniwind';
 
 // function to render tab layout
@@ -26,13 +26,6 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, size }) => <House size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="snippets"
-        options={{
-          title: 'Snippets',
-          tabBarIcon: ({ color, size }) => <Code size={size} color={color} />,
         }}
       />
       <Tabs.Screen
