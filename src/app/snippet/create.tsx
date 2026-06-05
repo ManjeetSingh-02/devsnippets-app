@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import { Typography, useToast } from 'heroui-native';
 import { ScrollView } from 'react-native';
 import { CircleAlert } from 'lucide-react-native';
+import { useState } from 'react';
 
 // type-imports
 import type { Snippet } from '@/types/snippet';
@@ -20,9 +21,15 @@ export default function Create() {
   // get the toast function from heroui
   const { toast } = useToast();
 
+  // state to manage UI
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // function to handle form submission
   async function handleSubmit(data: Snippet) {
     try {
+      // set submitting state to true
+      setIsSubmitting(true);
+
       // create the snippet in the database
       const id = await createSnippet(data);
 
@@ -43,6 +50,9 @@ export default function Create() {
         icon: <CircleAlert size={24} color="red" />,
         isSwipeable: true,
       });
+    } finally {
+      // set submitting state to false
+      setIsSubmitting(false);
     }
   }
 
@@ -54,7 +64,7 @@ export default function Create() {
         showsVerticalScrollIndicator={false}
       >
         <Typography.Heading type="h1">Create Snippet</Typography.Heading>
-        <SnippetForm onSubmit={handleSubmit} />
+        <SnippetForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       </ScrollView>
     </SafeScreen>
   );
