@@ -2,6 +2,7 @@
 import SafeScreen from '@/components/SafeScreen';
 import Appearance from '@/components/Appearance';
 import StorageManagement from '@/components/StorageManagement';
+import About from '@/components/About';
 
 // external-imports
 import { Typography } from 'heroui-native';
@@ -19,6 +20,7 @@ export default function Settings() {
         <Typography.Heading type="h1">Settings</Typography.Heading>
         <Appearance />
         <StorageManagement />
+        <About />
       </ScrollView>
     </SafeScreen>
   );
