@@ -2,7 +2,7 @@
 import { deleteAllSnippets } from '@/db';
 
 // external-imports
-import { Button, ListGroup, Separator, Spinner, Typography, useToast } from 'heroui-native';
+import { Button, Dialog, ListGroup, Separator, Spinner, Typography, useToast } from 'heroui-native';
 import {
   Box,
   CheckCircle2,
@@ -21,20 +21,40 @@ export default function StorageManagement() {
   const { theme } = useUniwind();
   const iconColor = theme === 'dark' ? 'white' : 'black';
 
-  // state to track if the snippets are being deleted
+  // state to control the visibility of the delete confirmation dialog
+  const [isOpen, setIsOpen] = useState(false);
+
+  // state to track if the deletion process is ongoing
   const [isDeleting, setIsDeleting] = useState(false);
 
   // get the toast function from heroui
   const { toast } = useToast();
 
-  // function to handle the deletion of all snippets
-  async function handleSnippetsDelete() {
+  // function to handle the open change of the dialog
+  function handleOpenChange(open: boolean) {
+    // prevent opening the dialog if deletion is in progress
+    if (isDeleting) return;
+
+    // update the open state of the dialog
+    setIsOpen(open);
+  }
+
+  // function to handle the close action
+  function handleClose() {
+    setIsOpen(false);
+  }
+
+  // function to handle the delete action
+  async function handleDelete() {
     try {
       // set the deleting state to true
       setIsDeleting(true);
 
       // delete all snippets from the database
       await deleteAllSnippets();
+
+      // close the confirmation dialog
+      setIsOpen(false);
 
       // show a success toast message
       toast.show({
@@ -44,7 +64,11 @@ export default function StorageManagement() {
         icon: <CheckCircle2 size={24} color="green" />,
         isSwipeable: true,
       });
-    } catch {
+    } catch (error) {
+      // log the error
+      console.error(error);
+
+      // show an error toast message
       toast.show({
         variant: 'danger',
         label: 'Deletion Failed',
@@ -53,6 +77,7 @@ export default function StorageManagement() {
         isSwipeable: true,
       });
     } finally {
+      // reset the deleting state
       setIsDeleting(false);
     }
   }
@@ -117,14 +142,42 @@ export default function StorageManagement() {
         </ListGroup.Item>
       </ListGroup>
 
-      <Button
-        variant="danger-soft"
-        className="w-full"
-        onPress={handleSnippetsDelete}
-        isDisabled={isDeleting}
-      >
-        {isDeleting ? <Spinner size="md" color="red" /> : 'Delete All Snippets'}
-      </Button>
+      <Dialog isOpen={isOpen} onOpenChange={handleOpenChange}>
+        <Dialog.Trigger asChild>
+          <Button variant="danger-soft" className="w-full" isDisabled={isDeleting}>
+            Delete All Snippets
+          </Button>
+        </Dialog.Trigger>
+        <Dialog.Portal>
+          <Dialog.Overlay />
+          <Dialog.Content>
+            <Dialog.Title>Delete All Snippets</Dialog.Title>
+            <Dialog.Description>
+              Are you sure you want to delete all snippets? This action cannot be undone.
+            </Dialog.Description>
+
+            <View className="mt-4 flex-row gap-2">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onPress={handleClose}
+                isDisabled={isDeleting}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                variant="danger-soft"
+                className="flex-1"
+                onPress={handleDelete}
+                isDisabled={isDeleting}
+              >
+                {isDeleting ? <Spinner size="md" color="danger" /> : 'Delete'}
+              </Button>
+            </View>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog>
     </View>
   );
 }
