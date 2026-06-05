@@ -1,5 +1,5 @@
 // internal-imports
-import { deleteAllSnippets, getSnippetsData } from '@/db';
+import { deleteAllSnippets, getSnippetsCount } from '@/db';
 import { formatBytes } from '@/utils/format-bytes';
 
 // external-imports
@@ -54,7 +54,7 @@ export default function StorageManagement() {
       setIsFetching(true);
 
       // fetch the snippets data from the database
-      const data = await getSnippetsData();
+      const data = await getSnippetsCount();
 
       // update the snippets data state with the fetched data
       setSnippetsData(data);
