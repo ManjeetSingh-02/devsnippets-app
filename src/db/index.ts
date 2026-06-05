@@ -1,6 +1,9 @@
 // external-imports
 import * as SQLite from 'expo-sqlite';
 
+// type-imports
+import type { Snippet, SnippetPreview, SnippetsCount, StoredSnippet } from '@/types/snippet';
+
 // open the database connection
 const database = SQLite.openDatabaseAsync('devsnippets.db');
 
@@ -20,15 +23,12 @@ export async function initDB() {
   )`);
 }
 
-export async function getSnippetsData() {
+export async function getSnippetsCount() {
   // get the database connection
   const db = await database;
 
   // execute the query to get all snippets
-  const [query] = await db.getAllAsync<{
-    totalSnippets: number;
-    favouriteSnippets: number;
-  }>(
+  const [query] = await db.getAllAsync<SnippetsCount>(
     `SELECT COUNT(*) as totalSnippets, COALESCE(SUM(favourite), 0) as favouriteSnippets FROM snippets`
   );
 
@@ -49,4 +49,52 @@ export async function deleteAllSnippets() {
 
   // delete all snippets from the database
   await db.execAsync('DELETE FROM snippets');
+}
+
+export async function getAllSnippets() {
+  // get the database connection
+  const db = await database;
+
+  // execute the query to get all snippets
+  return await db.getAllAsync<SnippetPreview>(
+    `SELECT id, title, language, tags, favourite, created_at FROM snippets ORDER BY created_at DESC`
+  );
+}
+
+export async function getSnippet(id: number) {
+  // get the database connection
+  const db = await database;
+
+  // execute the query to get the snippet with the specified id
+  return await db.getFirstAsync<StoredSnippet>(`SELECT * FROM snippets WHERE id = ?`, [id]);
+}
+
+export async function createSnippet(data: Snippet) {
+  // get the database connection
+  const db = await database;
+
+  // insert the new snippet into the database
+  await db.runAsync(
+    `INSERT INTO snippets (title, code, language, tags, favourite) VALUES (?, ?, ?, ?, ?)`,
+    [data.title, data.code, data.language, data.tags ?? null, data.favourite ? 1 : 0]
+  );
+}
+
+export async function updateSnippet({ id, data }: { id: number; data: Snippet }) {
+  // get the database connection
+  const db = await database;
+
+  // update the snippet with the specified id in the database
+  await db.runAsync(
+    `UPDATE snippets SET title = ?, code = ?, language = ?, tags = ?, favourite = ? WHERE id = ?`,
+    [data.title, data.code, data.language, data.tags ?? null, data.favourite ? 1 : 0, id]
+  );
+}
+
+export async function deleteSnippet(id: number) {
+  // get the database connection
+  const db = await database;
+
+  // delete the snippet with the specified id from the database
+  await db.runAsync(`DELETE FROM snippets WHERE id = ?`, [id]);
 }
