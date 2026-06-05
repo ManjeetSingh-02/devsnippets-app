@@ -1,4 +1,8 @@
+// internal-imports
+import { THEME_KEY } from '@/constants/storage-keys';
+
 // external-imports
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   BottomSheet,
   ListGroup,
@@ -6,15 +10,16 @@ import {
   RadioGroup,
   Separator,
   Typography,
+  useToast,
 } from 'heroui-native';
-import { ChevronRight, SunMoon } from 'lucide-react-native';
+import { ChevronRight, CircleAlert, SunMoon } from 'lucide-react-native';
 import { useState } from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Uniwind, useUniwind } from 'uniwind';
 
-// type for theme
-type Theme = 'system' | 'light' | 'dark';
+// type-imports
+import type { Theme } from '@/types/theme';
 
 // function to render the appearance options
 export default function Appearance() {
@@ -28,10 +33,33 @@ export default function Appearance() {
   // set the icon color based on the current theme
   const iconColor = theme === 'dark' ? 'white' : 'black';
 
+  // get the toast function from heroui
+  const { toast } = useToast();
+
   // function to handle theme change
-  function handleThemeChange(value: string) {
-    Uniwind.setTheme(value as Theme);
-    setIsOpen(false);
+  async function handleThemeChange(value: string) {
+    try {
+      // save the selected theme to async storage
+      await AsyncStorage.setItem(THEME_KEY, value);
+
+      // set the theme in uniwind
+      Uniwind.setTheme(value as Theme);
+
+      // close the bottom sheet
+      setIsOpen(false);
+    } catch (error) {
+      // log the error
+      console.error(error);
+
+      // show an error toast message
+      toast.show({
+        variant: 'danger',
+        label: 'Error',
+        description: 'Failed to change theme.',
+        icon: <CircleAlert size={24} color="red" />,
+        isSwipeable: true,
+      });
+    }
   }
 
   // function to animate the chevron icon when the bottom sheet is opened or closed
