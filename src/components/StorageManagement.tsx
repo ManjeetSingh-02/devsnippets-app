@@ -58,7 +58,7 @@ export default function StorageManagement() {
   }
 
   return (
-    <View className="gap-y-4">
+    <View className="gap-y-2">
       <Typography.Heading type="h6">Storage Management</Typography.Heading>
 
       <ListGroup className="w-full">

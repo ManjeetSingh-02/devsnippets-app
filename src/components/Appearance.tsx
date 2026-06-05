@@ -24,7 +24,7 @@ export default function Appearance() {
   }
 
   return (
-    <View className="gap-y-4">
+    <View className="gap-y-2">
       <Typography.Heading type="h6">Appearance</Typography.Heading>
       <ListGroup className="w-full">
         <BottomSheet isOpen={isOpen} onOpenChange={setIsOpen}>
