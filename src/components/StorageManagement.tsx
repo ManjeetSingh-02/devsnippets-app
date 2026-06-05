@@ -87,6 +87,24 @@ export default function StorageManagement() {
   // function to handle the delete action
   async function handleDelete() {
     try {
+      // if there are no snippets to delete
+      if (!snippetsData.totalSnippets) {
+        // show an info toast message
+        toast.show({
+          variant: 'default',
+          label: 'No Snippets to Delete',
+          description: 'There are no snippets available to delete.',
+          icon: <CircleAlert size={24} color={iconColor} />,
+          isSwipeable: true,
+        });
+
+        // close the confirmation dialog
+        setIsOpen(false);
+
+        // return early to prevent further execution
+        return;
+      }
+
       // set the deleting state to true
       setIsDeleting(true);
 
