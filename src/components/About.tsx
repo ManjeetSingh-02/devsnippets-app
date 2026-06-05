@@ -2,7 +2,7 @@
 import Constants from 'expo-constants';
 import * as Linking from 'expo-linking';
 import { LinkButton, ListGroup, Separator, Typography } from 'heroui-native';
-import { BadgeInfo, User } from 'lucide-react-native';
+import { BadgeInfo, ExternalLink, User } from 'lucide-react-native';
 import { View } from 'react-native';
 import { useUniwind } from 'uniwind';
 
@@ -40,14 +40,15 @@ export default function About() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Developer</ListGroup.ItemTitle>
-            <ListGroup.ItemDescription>
-              <LinkButton>
-                <LinkButton.Label className="text-accent-hover" onPress={handleDeveloperLinkPress}>
-                  Manjeet Singh
-                </LinkButton.Label>
-              </LinkButton>
-            </ListGroup.ItemDescription>
+            <ListGroup.ItemDescription>Manjeet Singh</ListGroup.ItemDescription>
           </ListGroup.ItemContent>
+          <ListGroup.ItemSuffix>
+            <LinkButton onPress={handleDeveloperLinkPress}>
+              <LinkButton.Label>
+                <ExternalLink size={24} color={iconColor} />
+              </LinkButton.Label>
+            </LinkButton>
+          </ListGroup.ItemSuffix>
         </ListGroup.Item>
       </ListGroup>
     </View>
