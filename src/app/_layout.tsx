@@ -13,7 +13,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 export default function RootLayout() {
   // useEffect to perform startup tasks
   useEffect(() => {
-    initDB();
+    void initDB();
   }, []);
 
   return (
