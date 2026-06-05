@@ -2,7 +2,7 @@
 import * as SQLite from 'expo-sqlite';
 
 // open the database connection
-export const database = SQLite.openDatabaseAsync('devsnippets.db');
+const database = SQLite.openDatabaseAsync('devsnippets.db');
 
 export async function initDB() {
   // get the database connection
@@ -17,6 +17,28 @@ export async function initDB() {
     tags TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
+}
+
+export async function getSnippetsData() {
+  // get the database connection
+  const db = await database;
+
+  // execute the query to count all snippets
+  const result = await db.getFirstAsync<{ totalSnippets: number }>(
+    'SELECT COUNT(*) as totalSnippets FROM snippets'
+  );
+
+  // get the total snippets count from the query result
+  const totalSnippets = result?.totalSnippets ?? 0;
+
+  // if there are no snippets, return 0 for both total snippets and storage used
+  if (!totalSnippets) return { totalSnippets: 0, storageUsed: 0 };
+
+  // get the file info of the database to calculate storage used
+  const dbFileInfo = await db.serializeAsync();
+
+  // return the total snippets count and storage used
+  return { totalSnippets, storageUsed: dbFileInfo.byteLength };
 }
 
 export async function deleteAllSnippets() {
