@@ -1,5 +1,12 @@
 // external-imports
-import { BottomSheet, ListGroup, PressableFeedback, RadioGroup, Typography } from 'heroui-native';
+import {
+  BottomSheet,
+  ListGroup,
+  PressableFeedback,
+  RadioGroup,
+  Separator,
+  Typography,
+} from 'heroui-native';
 import { ChevronRight, SunMoon } from 'lucide-react-native';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -70,7 +77,9 @@ export default function Appearance() {
                 onValueChange={handleThemeChange}
               >
                 <RadioGroup.Item value="system">System</RadioGroup.Item>
+                <Separator />
                 <RadioGroup.Item value="light">Light</RadioGroup.Item>
+                <Separator />
                 <RadioGroup.Item value="dark">Dark</RadioGroup.Item>
               </RadioGroup>
             </BottomSheet.Content>
