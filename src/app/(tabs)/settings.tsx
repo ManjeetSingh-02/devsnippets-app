@@ -17,7 +17,7 @@ export default function Settings() {
         contentContainerClassName="px-4 py-6 gap-6"
         showsVerticalScrollIndicator={false}
       >
-        <Typography.Heading type="h1">Settings</Typography.Heading>
+        <Typography.Heading type="h1">App Settings</Typography.Heading>
         <Appearance />
         <StorageManagement />
         <About />
