@@ -93,10 +93,8 @@ export default function StorageManagement() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Storage Type</ListGroup.ItemTitle>
+            <ListGroup.ItemDescription>Local</ListGroup.ItemDescription>
           </ListGroup.ItemContent>
-          <ListGroup.ItemSuffix>
-            <Typography.Paragraph>Local</Typography.Paragraph>
-          </ListGroup.ItemSuffix>
         </ListGroup.Item>
 
         <Separator />
@@ -107,10 +105,8 @@ export default function StorageManagement() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Storage Used</ListGroup.ItemTitle>
+            <ListGroup.ItemDescription>1.4 MB</ListGroup.ItemDescription>
           </ListGroup.ItemContent>
-          <ListGroup.ItemSuffix>
-            <Typography.Paragraph>1.4 MB</Typography.Paragraph>
-          </ListGroup.ItemSuffix>
         </ListGroup.Item>
 
         <Separator />
@@ -121,10 +117,8 @@ export default function StorageManagement() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Total Snippets</ListGroup.ItemTitle>
+            <ListGroup.ItemDescription>128</ListGroup.ItemDescription>
           </ListGroup.ItemContent>
-          <ListGroup.ItemSuffix>
-            <Typography.Paragraph>128</Typography.Paragraph>
-          </ListGroup.ItemSuffix>
         </ListGroup.Item>
 
         <Separator />
@@ -135,10 +129,8 @@ export default function StorageManagement() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Favourite Snippets</ListGroup.ItemTitle>
+            <ListGroup.ItemDescription>12</ListGroup.ItemDescription>
           </ListGroup.ItemContent>
-          <ListGroup.ItemSuffix>
-            <Typography.Paragraph>12</Typography.Paragraph>
-          </ListGroup.ItemSuffix>
         </ListGroup.Item>
       </ListGroup>
 

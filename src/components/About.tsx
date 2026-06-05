@@ -28,10 +28,8 @@ export default function About() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Version</ListGroup.ItemTitle>
+            <ListGroup.ItemDescription>{Constants.expoConfig?.version}</ListGroup.ItemDescription>
           </ListGroup.ItemContent>
-          <ListGroup.ItemSuffix>
-            <Typography.Paragraph>{Constants.expoConfig?.version}</Typography.Paragraph>
-          </ListGroup.ItemSuffix>
         </ListGroup.Item>
 
         <Separator />
@@ -42,14 +40,14 @@ export default function About() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Developer</ListGroup.ItemTitle>
+            <ListGroup.ItemDescription>
+              <LinkButton>
+                <LinkButton.Label className="text-accent-hover" onPress={handleDeveloperLinkPress}>
+                  Manjeet Singh
+                </LinkButton.Label>
+              </LinkButton>
+            </ListGroup.ItemDescription>
           </ListGroup.ItemContent>
-          <ListGroup.ItemSuffix>
-            <LinkButton>
-              <LinkButton.Label className="text-accent-hover" onPress={handleDeveloperLinkPress}>
-                Manjeet Singh
-              </LinkButton.Label>
-            </LinkButton>
-          </ListGroup.ItemSuffix>
         </ListGroup.Item>
       </ListGroup>
     </View>
