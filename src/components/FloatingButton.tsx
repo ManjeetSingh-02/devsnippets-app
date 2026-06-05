@@ -1,0 +1,16 @@
+// external-imports
+import { Button } from 'heroui-native';
+import { Plus } from 'lucide-react-native';
+import { useUniwind } from 'uniwind';
+
+export default function FloatingButton() {
+  // get the current theme from uniwind
+  const { theme } = useUniwind();
+  const iconColor = theme === 'dark' ? 'white' : 'black';
+
+  return (
+    <Button isIconOnly variant="outline" className="absolute bottom-4 right-4" size="lg">
+      <Plus size={24} color={iconColor} />
+    </Button>
+  );
+}
