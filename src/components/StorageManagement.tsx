@@ -1,19 +1,28 @@
 // internal-imports
-import { deleteAllSnippets } from '@/db';
+import { deleteAllSnippets, getSnippetsData } from '@/db';
+import { formatBytes } from '@/utils/format-bytes';
 
 // external-imports
+import { useFocusEffect } from 'expo-router';
 import { Button, Dialog, ListGroup, Separator, Spinner, Typography, useToast } from 'heroui-native';
 import {
   Box,
   CheckCircle2,
-  CircleX,
+  CircleAlert,
   FileBox,
   FileCodeCorner,
   FileHeart,
 } from 'lucide-react-native';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { useUniwind } from 'uniwind';
+
+// type for the snippets data
+type SnippetsData = {
+  totalSnippets: number;
+  favouriteSnippets: number;
+  storageUsed: number;
+};
 
 // function to render the storage management options
 export default function StorageManagement() {
@@ -21,14 +30,45 @@ export default function StorageManagement() {
   const { theme } = useUniwind();
   const iconColor = theme === 'dark' ? 'white' : 'black';
 
-  // state to control the visibility of the delete confirmation dialog
+  // states to manage data and UI
   const [isOpen, setIsOpen] = useState(false);
-
-  // state to track if the deletion process is ongoing
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState(false);
+  const [snippetsData, setSnippetsData] = useState<SnippetsData>({
+    totalSnippets: 0,
+    favouriteSnippets: 0,
+    storageUsed: 0,
+  });
 
   // get the toast function from heroui
   const { toast } = useToast();
+
+  // function to update the snippets count and storage used
+  async function updateSnippetsData() {
+    try {
+      // set the error state to null before fetching data
+      setError(false);
+
+      // set the fetching state to true
+      setIsFetching(true);
+
+      // fetch the snippets data from the database
+      const data = await getSnippetsData();
+
+      // update the snippets data state with the fetched data
+      setSnippetsData(data);
+    } catch (error) {
+      // log the error
+      console.error(error);
+
+      // set the error state to true
+      setError(true);
+    } finally {
+      // reset the fetching state
+      setIsFetching(false);
+    }
+  }
 
   // function to handle the open change of the dialog
   function handleOpenChange(open: boolean) {
@@ -56,6 +96,9 @@ export default function StorageManagement() {
       // close the confirmation dialog
       setIsOpen(false);
 
+      // update the snippets data to reflect the changes
+      await updateSnippetsData();
+
       // show a success toast message
       toast.show({
         variant: 'success',
@@ -73,7 +116,7 @@ export default function StorageManagement() {
         variant: 'danger',
         label: 'Deletion Failed',
         description: 'Something went wrong while deleting the snippets.',
-        icon: <CircleX size={24} color="red" />,
+        icon: <CircleAlert size={24} color="red" />,
         isSwipeable: true,
       });
     } finally {
@@ -81,6 +124,13 @@ export default function StorageManagement() {
       setIsDeleting(false);
     }
   }
+
+  // fetch the snippets count and storage used when the component mounts
+  useFocusEffect(
+    useCallback(() => {
+      void updateSnippetsData();
+    }, [])
+  );
 
   return (
     <View className="gap-y-2">
@@ -105,7 +155,15 @@ export default function StorageManagement() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Storage Used</ListGroup.ItemTitle>
-            <ListGroup.ItemDescription>1.4 MB</ListGroup.ItemDescription>
+            <ListGroup.ItemDescription>
+              {isFetching ? (
+                <Spinner size="sm" color={iconColor} />
+              ) : error ? (
+                'Unavailable'
+              ) : (
+                formatBytes(snippetsData.storageUsed)
+              )}
+            </ListGroup.ItemDescription>
           </ListGroup.ItemContent>
         </ListGroup.Item>
 
@@ -117,7 +175,15 @@ export default function StorageManagement() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Total Snippets</ListGroup.ItemTitle>
-            <ListGroup.ItemDescription>128</ListGroup.ItemDescription>
+            <ListGroup.ItemDescription>
+              {isFetching ? (
+                <Spinner size="sm" color={iconColor} />
+              ) : error ? (
+                'Unavailable'
+              ) : (
+                snippetsData.totalSnippets
+              )}
+            </ListGroup.ItemDescription>
           </ListGroup.ItemContent>
         </ListGroup.Item>
 
@@ -129,14 +195,22 @@ export default function StorageManagement() {
           </ListGroup.ItemPrefix>
           <ListGroup.ItemContent>
             <ListGroup.ItemTitle>Favourite Snippets</ListGroup.ItemTitle>
-            <ListGroup.ItemDescription>12</ListGroup.ItemDescription>
+            <ListGroup.ItemDescription>
+              {isFetching ? (
+                <Spinner size="sm" color={iconColor} />
+              ) : error ? (
+                'Unavailable'
+              ) : (
+                snippetsData.favouriteSnippets
+              )}
+            </ListGroup.ItemDescription>
           </ListGroup.ItemContent>
         </ListGroup.Item>
       </ListGroup>
 
       <Dialog isOpen={isOpen} onOpenChange={handleOpenChange}>
         <Dialog.Trigger asChild>
-          <Button variant="danger-soft" className="w-full" isDisabled={isDeleting}>
+          <Button variant="danger-soft" className="w-full" isDisabled={isDeleting || isFetching}>
             Delete All Snippets
           </Button>
         </Dialog.Trigger>
