@@ -32,13 +32,13 @@ export async function getSnippetsData() {
   const totalSnippets = result?.totalSnippets ?? 0;
 
   // if there are no snippets, return 0 for both total snippets and storage used
-  if (!totalSnippets) return { totalSnippets: 0, storageUsed: 0 };
+  if (!totalSnippets) return { totalSnippets: 0, favouriteSnippets: 0, storageUsed: 0 };
 
   // get the file info of the database to calculate storage used
   const dbFileInfo = await db.serializeAsync();
 
   // return the total snippets count and storage used
-  return { totalSnippets, storageUsed: dbFileInfo.byteLength };
+  return { totalSnippets, favouriteSnippets: 0, storageUsed: dbFileInfo.byteLength };
 }
 
 export async function deleteAllSnippets() {
