@@ -1,7 +1,8 @@
 // external-imports
-import { Button, Checkbox, Input, Label, TextArea, TextField } from 'heroui-native';
+import { Button, Checkbox, Input, Label, Spinner, TextArea, TextField } from 'heroui-native';
 import { useState } from 'react';
 import { View } from 'react-native';
+import { useUniwind } from 'uniwind';
 
 // type-imports
 import type { Snippet } from '@/types/snippet';
@@ -10,10 +11,15 @@ import type { Snippet } from '@/types/snippet';
 type SnippetFormProps = {
   initialData?: Snippet;
   onSubmit: (data: Snippet) => void;
+  isSubmitting: boolean;
 };
 
 // function to render the snippet form
-export default function SnippetForm({ initialData, onSubmit }: SnippetFormProps) {
+export default function SnippetForm({ initialData, onSubmit, isSubmitting }: SnippetFormProps) {
+  // get the current theme from uniwind
+  const { theme } = useUniwind();
+  const iconColor = theme === 'dark' ? 'white' : 'black';
+
   // state to manage the form data
   const [title, setTitle] = useState(initialData?.title ?? '');
   const [language, setLanguage] = useState(initialData?.language ?? '');
@@ -65,8 +71,14 @@ export default function SnippetForm({ initialData, onSubmit }: SnippetFormProps)
         <Checkbox isSelected={favourite} onSelectedChange={setFavourite} />
       </View>
 
-      <Button variant="outline" onPress={handleSubmit} isDisabled={!isValid}>
-        {isEditing ? 'Update Snippet' : 'Create Snippet'}
+      <Button variant="outline" onPress={handleSubmit} isDisabled={!isValid || isSubmitting}>
+        {isSubmitting ? (
+          <Spinner size="md" color={iconColor} />
+        ) : isEditing ? (
+          'Update Snippet'
+        ) : (
+          'Create Snippet'
+        )}
       </Button>
     </View>
   );
