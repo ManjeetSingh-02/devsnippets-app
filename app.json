@@ -9,7 +9,7 @@
     "android": {
       "predictiveBackGestureEnabled": false
     },
-    "plugins": ["expo-router", "expo-sqlite", "expo-status-bar"],
+    "plugins": ["expo-router", "expo-sqlite", "expo-status-bar", "expo-image"],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
