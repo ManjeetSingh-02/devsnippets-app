@@ -39,7 +39,7 @@ export default function SnippetForm({ initialData, onSubmit, isSubmitting }: Sni
       title: title.trim(),
       language: language.trim(),
       code: code.trim(),
-      tags: tags.trim() ?? undefined,
+      tags: tags.trim(),
       favourite,
     });
   }
