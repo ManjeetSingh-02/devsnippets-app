@@ -46,29 +46,33 @@ export default function SnippetForm({ initialData, onSubmit, isSubmitting }: Sni
 
   return (
     <View className="gap-y-4">
-      <TextField isRequired>
+      <TextField isRequired isDisabled={isSubmitting}>
         <Label>Title</Label>
         <Input placeholder="Enter snippet title" value={title} onChangeText={setTitle} />
       </TextField>
 
-      <TextField isRequired>
+      <TextField isRequired isDisabled={isSubmitting}>
         <Label>Language</Label>
         <Input placeholder="Enter snippet language" value={language} onChangeText={setLanguage} />
       </TextField>
 
-      <TextField isRequired>
+      <TextField isRequired isDisabled={isSubmitting}>
         <Label>Code</Label>
         <TextArea placeholder="Enter snippet code" value={code} onChangeText={setCode} />
       </TextField>
 
-      <TextField>
+      <TextField isDisabled={isSubmitting}>
         <Label>Tags</Label>
         <Input placeholder="Enter snippet tags" value={tags} onChangeText={setTags} />
       </TextField>
 
       <View className="flex-row items-center gap-x-2">
-        <Label>Mark as favourite</Label>
-        <Checkbox isSelected={favourite} onSelectedChange={setFavourite} />
+        <Label isDisabled={isSubmitting}>Mark as favourite</Label>
+        <Checkbox
+          isSelected={favourite}
+          onSelectedChange={setFavourite}
+          isDisabled={isSubmitting}
+        />
       </View>
 
       <Button variant="outline" onPress={handleSubmit} isDisabled={!isValid || isSubmitting}>
