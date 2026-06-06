@@ -15,7 +15,7 @@ export default function FloatingButton() {
   // function to handle button press
   function handlePress() {
     // navigate to the create page
-    router.push('/snippet/create');
+    router.push('/snippets/create');
   }
 
   return (

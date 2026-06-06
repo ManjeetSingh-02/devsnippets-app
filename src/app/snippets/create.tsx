@@ -35,7 +35,7 @@ export default function Create() {
 
       // navigate to the snippet details screen
       router.replace({
-        pathname: '/snippet/[id]',
+        pathname: '/snippets/[id]',
         params: { id },
       });
     } catch (error) {

@@ -22,9 +22,9 @@ export default function RootLayout() {
         <StatusBar style="auto" animated />
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="snippet/create" options={{ headerShown: false }} />
-          <Stack.Screen name="snippet/[id]/index" options={{ headerShown: false }} />
-          <Stack.Screen name="snippet/[id]/edit" options={{ headerShown: false }} />
+          <Stack.Screen name="snippets/create" options={{ headerShown: false }} />
+          <Stack.Screen name="snippets/[id]/index" options={{ headerShown: false }} />
+          <Stack.Screen name="snippets/[id]/edit" options={{ headerShown: false }} />
         </Stack>
       </HeroUINativeProvider>
     </GestureHandlerRootView>
