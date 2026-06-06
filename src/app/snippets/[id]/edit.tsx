@@ -74,8 +74,21 @@ export default function Edit() {
         // fetch the snippet data from the database
         const data = await getSnippet(Number(id));
 
-        // if no data is found, navigate back to the previous screen
-        if (!data) return router.back();
+        // if no data is found, show an error toast and navigate back to the home screen
+        if (!data) {
+          // show an error toast message
+          toast.show({
+            variant: 'danger',
+            label: 'Error',
+            description: 'Snippet not found.',
+            icon: <CircleAlert size={24} color="red" />,
+            isSwipeable: true,
+          });
+
+          // navigate back to the home screen
+          router.replace('/(tabs)/home');
+          return;
+        }
 
         // set the snippet data in state
         setSnippetData(data);
