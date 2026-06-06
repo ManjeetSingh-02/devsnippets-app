@@ -7,7 +7,7 @@ import { getSnippet, updateSnippet } from '@/db';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Spinner, Typography, useToast } from 'heroui-native';
 import { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { CircleAlert } from 'lucide-react-native';
 import { useUniwind } from 'uniwind';
 
@@ -108,20 +108,25 @@ export default function Edit() {
           <Spinner size="lg" color={iconColor} />
         </View>
       ) : (
-        <ScrollView
+        <KeyboardAvoidingView
           className="flex-1"
-          contentContainerClassName="px-4 py-6 gap-6"
-          showsVerticalScrollIndicator={false}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          <Typography.Heading type="h1">Update Snippet</Typography.Heading>
-          {snippetData && (
-            <SnippetForm
-              initialData={snippetData}
-              onSubmit={handleSubmit}
-              isSubmitting={isUpdating}
-            />
-          )}
-        </ScrollView>
+          <ScrollView
+            className="flex-1"
+            contentContainerClassName="px-4 py-6 gap-6"
+            showsVerticalScrollIndicator={false}
+          >
+            <Typography.Heading type="h1">Update Snippet</Typography.Heading>
+            {snippetData && (
+              <SnippetForm
+                initialData={snippetData}
+                onSubmit={handleSubmit}
+                isSubmitting={isUpdating}
+              />
+            )}
+          </ScrollView>
+        </KeyboardAvoidingView>
       )}
     </SafeScreen>
   );

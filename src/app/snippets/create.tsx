@@ -6,7 +6,7 @@ import { createSnippet } from '@/db';
 // external-imports
 import { useRouter } from 'expo-router';
 import { Typography, useToast } from 'heroui-native';
-import { ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { CircleAlert } from 'lucide-react-native';
 import { useState } from 'react';
 
@@ -58,14 +58,19 @@ export default function Create() {
 
   return (
     <SafeScreen>
-      <ScrollView
+      <KeyboardAvoidingView
         className="flex-1"
-        contentContainerClassName="px-4 py-6 gap-6"
-        showsVerticalScrollIndicator={false}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <Typography.Heading type="h1">Create Snippet</Typography.Heading>
-        <SnippetForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
-      </ScrollView>
+        <ScrollView
+          className="flex-1"
+          contentContainerClassName="px-4 py-6 gap-6"
+          showsVerticalScrollIndicator={false}
+        >
+          <Typography.Heading type="h1">Create Snippet</Typography.Heading>
+          <SnippetForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeScreen>
   );
 }
