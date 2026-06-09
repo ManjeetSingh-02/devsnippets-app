@@ -27,10 +27,32 @@ export default function Home() {
   const [snippetsData, setSnippetsData] = useState<SnippetPreview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [favouritesOnly, setFavouritesOnly] = useState(false);
+
+  // filter the snippets data based on the query and favourites
+  const filteredSnippets = snippetsData.filter(snippet => {
+    const query = searchValue.trim().toLowerCase();
+
+    const matchesSearch =
+      query.length === 0 ||
+      snippet.title.toLowerCase().includes(query) ||
+      snippet.language.toLowerCase().includes(query);
+
+    const matchesFavourite = !favouritesOnly || snippet.favourite;
+
+    return matchesSearch && matchesFavourite;
+  });
 
   // function to fetch all snippets from the database
-  async function fetchSnippet() {
+  async function fetchSnippets() {
     try {
+      // set loading state to true
+      setIsLoading(true);
+
+      // set error state to false
+      setError(false);
+
       // fetch the snippets data from the database
       const data = await getAllSnippets();
 
@@ -51,7 +73,7 @@ export default function Home() {
   // fetch snippets when the component is focused
   useFocusEffect(
     useCallback(() => {
-      void fetchSnippet();
+      void fetchSnippets();
     }, [])
   );
 
@@ -71,9 +93,14 @@ export default function Home() {
         <View className="flex-1">
           <View className="px-4 py-6 gap-6">
             <Typography.Heading type="h1">Your Snippets</Typography.Heading>
-            <Header />
+            <Header
+              searchValue={searchValue}
+              onSearchChange={setSearchValue}
+              favouritesOnly={favouritesOnly}
+              onFavouriteToggle={() => setFavouritesOnly(prev => !prev)}
+            />
           </View>
-          <SnippetList data={snippetsData} />
+          <SnippetList data={filteredSnippets} />
           <FloatingButton />
         </View>
       )}
