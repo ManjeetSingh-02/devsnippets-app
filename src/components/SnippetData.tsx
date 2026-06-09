@@ -1,8 +1,8 @@
 // external-imports
 import { useRouter } from 'expo-router';
 import { Button, Card, Chip, Separator, Typography } from 'heroui-native';
-import { CalendarDays, Heart, Pencil, Share } from 'lucide-react-native';
-import { View } from 'react-native';
+import { CalendarDays, Heart, Pencil, Share2 } from 'lucide-react-native';
+import { Share, View } from 'react-native';
 import { useUniwind } from 'uniwind';
 
 // type-imports
@@ -74,8 +74,12 @@ export default function SnippetData({ data }: { data: StoredSnippet }) {
           >
             <Pencil color={iconColor} />
           </Button>
-          <Button variant="outline" isIconOnly>
-            <Share color={iconColor} />
+          <Button
+            variant="outline"
+            isIconOnly
+            onPress={() => Share.share({ title: data.title, message: data.code })}
+          >
+            <Share2 color={iconColor} />
           </Button>
         </View>
       </Card.Footer>
