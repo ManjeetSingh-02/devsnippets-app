@@ -3,9 +3,10 @@ import { getAllSnippets } from '@/db';
 import { SnippetPreview } from '@/types/snippet';
 
 // external-imports
+import { useFocusEffect } from 'expo-router';
 import { Card, Chip, Spinner, Typography } from 'heroui-native';
 import { Heart } from 'lucide-react-native';
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { FlatList, View } from 'react-native';
 import { useUniwind } from 'uniwind';
 
@@ -59,31 +60,32 @@ export default function SnippetList() {
     );
   }
 
-  // useEffect to fetch the snippets when the component mounts
-  useEffect(() => {
-    // function to fetch all snippets from the database
-    async function fetchSnippet() {
-      try {
-        // fetch the snippets data from the database
-        const data = await getAllSnippets();
+  // function to fetch all snippets from the database
+  async function fetchSnippet() {
+    try {
+      // fetch the snippets data from the database
+      const data = await getAllSnippets();
 
-        // set the snippets data in state
-        setSnippetsData(data);
-      } catch (error) {
-        // log the error
-        console.error(error);
+      // set the snippets data in state
+      setSnippetsData(data);
+    } catch (error) {
+      // log the error
+      console.error(error);
 
-        // set error state to true
-        setError(true);
-      } finally {
-        // set loading state to false
-        setIsLoading(false);
-      }
+      // set error state to true
+      setError(true);
+    } finally {
+      // set loading state to false
+      setIsLoading(false);
     }
+  }
 
-    // call the fetchSnippet function
-    fetchSnippet();
-  }, []);
+  // fetch snippets when the component is focused
+  useFocusEffect(
+    useCallback(() => {
+      void fetchSnippet();
+    }, [])
+  );
 
   return isLoading ? (
     <Spinner size="lg" color={iconColor} className="mt-10 self-center" />
