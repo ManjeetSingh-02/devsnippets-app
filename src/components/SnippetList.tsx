@@ -3,8 +3,8 @@ import { getAllSnippets } from '@/db';
 import { SnippetPreview } from '@/types/snippet';
 
 // external-imports
-import { useFocusEffect } from 'expo-router';
-import { Card, Chip, Spinner, Typography } from 'heroui-native';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { Card, Chip, PressableFeedback, Spinner, Typography } from 'heroui-native';
 import { Heart } from 'lucide-react-native';
 import { useState, useCallback } from 'react';
 import { FlatList, View } from 'react-native';
@@ -16,6 +16,9 @@ export default function SnippetList() {
   const { theme } = useUniwind();
   const iconColor = theme === 'dark' ? 'white' : 'black';
 
+  // get the router instance for navigation
+  const router = useRouter();
+
   // state for the data and UI
   const [snippetsData, setSnippetsData] = useState<SnippetPreview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,30 +27,36 @@ export default function SnippetList() {
   // function to render each item in the snippet list
   function renderItemComponent({ item }: { item: SnippetPreview }) {
     return (
-      <Card className="mx-3 mb-3">
-        <Card.Header>
-          <Chip size="md" variant="tertiary" color="default">
-            {item.language.toUpperCase()}
-          </Chip>
-        </Card.Header>
-        <Card.Body className="gap-y-4 p-4">
-          <View className="flex-row items-start justify-between">
-            <Card.Title>{item.title}</Card.Title>
-            <Heart size={20} color={iconColor} fill={item.favourite ? iconColor : 'transparent'} />
-          </View>
-        </Card.Body>
-        <Card.Footer className="flex-row items-center gap-2">
-          {item.tags
-            ?.split(',')
-            .map(tag => tag.trim())
-            .filter(Boolean)
-            .map((tag, i) => (
-              <Chip variant="secondary" color="default" key={i} size="sm">
-                {tag}
-              </Chip>
-            ))}
-        </Card.Footer>
-      </Card>
+      <PressableFeedback onPress={() => router.push(`/snippets/${item.id}`)}>
+        <Card className="mx-3 mb-3">
+          <Card.Header>
+            <Chip size="md" variant="tertiary" color="default">
+              {item.language.toUpperCase()}
+            </Chip>
+          </Card.Header>
+          <Card.Body className="gap-y-4 p-4">
+            <View className="flex-row items-start justify-between">
+              <Card.Title>{item.title}</Card.Title>
+              <Heart
+                size={20}
+                color={iconColor}
+                fill={item.favourite ? iconColor : 'transparent'}
+              />
+            </View>
+          </Card.Body>
+          <Card.Footer className="flex-row items-center gap-2">
+            {item.tags
+              ?.split(',')
+              .map(tag => tag.trim())
+              .filter(Boolean)
+              .map((tag, i) => (
+                <Chip variant="secondary" color="default" key={i} size="sm">
+                  {tag}
+                </Chip>
+              ))}
+          </Card.Footer>
+        </Card>
+      </PressableFeedback>
     );
   }
 
