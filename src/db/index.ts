@@ -57,7 +57,7 @@ export async function getAllSnippets() {
 
   // execute the query to get all snippets
   return await db.getAllAsync<SnippetPreview>(
-    `SELECT id, title, language, tags, favourite, created_at FROM snippets ORDER BY created_at DESC`
+    `SELECT id, title, language, favourite, created_at FROM snippets ORDER BY created_at DESC`
   );
 }
 

@@ -13,7 +13,7 @@ export type StoredSnippet = Snippet & {
 
 export type SnippetPreview = Pick<
   StoredSnippet,
-  'id' | 'title' | 'language' | 'tags' | 'favourite' | 'created_at'
+  'id' | 'title' | 'language' | 'favourite' | 'created_at'
 >;
 
 export type SnippetsCount = {
