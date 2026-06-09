@@ -21,7 +21,8 @@ export default function Edit() {
   const iconColor = theme === 'dark' ? 'white' : 'black';
 
   // get the id from the route params
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const snippetID = Number(id);
 
   // get the router instance from useRouter
   const router = useRouter();
@@ -41,12 +42,12 @@ export default function Edit() {
       setIsUpdating(true);
 
       // update the snippet in the database
-      await updateSnippet({ data, id: Number(id) });
+      await updateSnippet({ data, id: snippetID });
 
       // navigate to the snippet details screen
       router.replace({
         pathname: '/snippets/[id]',
-        params: { id: Number(id) },
+        params: { id: snippetID },
       });
     } catch (error) {
       // log the error
@@ -72,7 +73,7 @@ export default function Edit() {
     async function fetchSnippet() {
       try {
         // fetch the snippet data from the database
-        const data = await getSnippet(Number(id));
+        const data = await getSnippet(snippetID);
 
         // if no data is found, show an error toast and navigate back to the home screen
         if (!data) {
@@ -112,7 +113,7 @@ export default function Edit() {
 
     // call the fetchSnippet function
     fetchSnippet();
-  }, [id, router, toast]);
+  }, [snippetID, router, toast]);
 
   return (
     <SafeScreen>
