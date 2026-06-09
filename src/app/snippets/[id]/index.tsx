@@ -91,7 +91,7 @@ export default function Snippet() {
       ) : (
         <ScrollView
           className="flex-1"
-          contentContainerClassName="px-4 py-6 gap-6"
+          contentContainerClassName="py-6"
           showsVerticalScrollIndicator={false}
         >
           {snippetData && <SnippetData data={snippetData} />}
