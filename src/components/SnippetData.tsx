@@ -1,7 +1,7 @@
 // external-imports
 import { useRouter } from 'expo-router';
 import { Button, Card, Chip, Separator, Typography } from 'heroui-native';
-import { CalendarDays, Heart, Pencil, Share2 } from 'lucide-react-native';
+import { Heart, Pencil, Share2 } from 'lucide-react-native';
 import { Share, View } from 'react-native';
 import { useUniwind } from 'uniwind';
 
@@ -14,59 +14,49 @@ export default function SnippetData({ data }: { data: StoredSnippet }) {
   const { theme } = useUniwind();
   const iconColor = theme === 'dark' ? 'white' : 'black';
 
+  const tags = data.tags ? data.tags.split(',').map(tag => tag.trim()) : [];
+
   // get the router instance for navigation
   const router = useRouter();
 
   return (
     <Card variant="transparent">
       <Card.Body className="gap-y-5 p-4">
-        <View className="flex-row items-start justify-between">
-          <Typography.Heading type="h2">{data.title}</Typography.Heading>
-          <Heart size={24} fill={data.favourite ? 'currentColor' : 'transparent'} />
-        </View>
-
         <View className="gap-y-3">
-          <View className="flex-row items-center justify-between">
-            <Typography.Heading>Language</Typography.Heading>
-            <Chip>{data.language}</Chip>
+          <View className="flex-row items-start justify-between">
+            <Typography.Heading type="h2">{data.title}</Typography.Heading>
+            <Heart size={22} fill={data.favourite ? iconColor : 'transparent'} color={iconColor} />
           </View>
 
-          <View className="flex-row items-center gap-x-2">
-            <CalendarDays size={18} />
-            <Typography.Paragraph>{data.created_at}</Typography.Paragraph>
+          <View className="flex-row justify-between items-center">
+            <Chip size="sm" variant="soft" color="default">
+              {data.language.toUpperCase()}
+            </Chip>
+            <Typography.Paragraph className="text-sm">
+              {new Date(data.created_at).toLocaleString()}
+            </Typography.Paragraph>
           </View>
 
           {data.tags && (
-            <View className="gap-y-2">
-              <Typography.Paragraph>Tags</Typography.Paragraph>
-              <View className="flex-row flex-wrap gap-2">
-                {data.tags
-                  .split(',')
-                  .map(tag => tag.trim())
-                  .filter(Boolean)
-                  .map(tag => (
-                    <Chip key={tag} size="sm">
-                      {tag}
-                    </Chip>
-                  ))}
-              </View>
+            <View className="flex-row flex-wrap gap-2">
+              {tags.map(tag => (
+                <Chip key={tag} size="sm" variant="soft" color="default">
+                  {tag}
+                </Chip>
+              ))}
             </View>
           )}
         </View>
 
         <Separator />
 
-        <View className="gap-y-2">
-          <Typography.Heading type="h4">Code</Typography.Heading>
-          <Card variant="tertiary">
-            <Card.Body className="p-4">
-              <Typography.Code>{data.code}</Typography.Code>
-            </Card.Body>
-          </Card>
-        </View>
+        <Card variant="tertiary">
+          <Typography.Code>{data.code}</Typography.Code>
+        </Card>
       </Card.Body>
+
       <Card.Footer>
-        <View className="flex-row gap-x-3">
+        <View className="flex-row justify-center gap-x-4">
           <Button
             variant="outline"
             isIconOnly
