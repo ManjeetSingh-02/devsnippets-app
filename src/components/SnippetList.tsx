@@ -1,28 +1,21 @@
-// internal-imports
-import { getAllSnippets } from '@/db';
-import { SnippetPreview } from '@/types/snippet';
-
 // external-imports
-import { useFocusEffect, useRouter } from 'expo-router';
-import { Card, Chip, PressableFeedback, Spinner, Typography } from 'heroui-native';
+import { useRouter } from 'expo-router';
+import { Card, Chip, PressableFeedback, Typography } from 'heroui-native';
 import { Heart } from 'lucide-react-native';
-import { useState, useCallback } from 'react';
 import { FlatList, View } from 'react-native';
 import { useUniwind } from 'uniwind';
 
+// type-imports
+import { SnippetPreview } from '@/types/snippet';
+
 // function component for the snippet list
-export default function SnippetList() {
+export default function SnippetList({ data }: { data: SnippetPreview[] }) {
   // get the current theme from uniwind
   const { theme } = useUniwind();
   const iconColor = theme === 'dark' ? 'white' : 'black';
 
   // get the router instance for navigation
   const router = useRouter();
-
-  // state for the data and UI
-  const [snippetsData, setSnippetsData] = useState<SnippetPreview[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
 
   // function to render each item in the snippet list
   function renderItemComponent({ item }: { item: SnippetPreview }) {
@@ -69,42 +62,9 @@ export default function SnippetList() {
     );
   }
 
-  // function to fetch all snippets from the database
-  async function fetchSnippet() {
-    try {
-      // fetch the snippets data from the database
-      const data = await getAllSnippets();
-
-      // set the snippets data in state
-      setSnippetsData(data);
-    } catch (error) {
-      // log the error
-      console.error(error);
-
-      // set error state to true
-      setError(true);
-    } finally {
-      // set loading state to false
-      setIsLoading(false);
-    }
-  }
-
-  // fetch snippets when the component is focused
-  useFocusEffect(
-    useCallback(() => {
-      void fetchSnippet();
-    }, [])
-  );
-
-  return isLoading ? (
-    <Spinner size="lg" color={iconColor} className="mt-10 self-center" />
-  ) : error ? (
-    <Typography type="h4" className="text-center mt-10">
-      Failed to load snippets.
-    </Typography>
-  ) : (
+  return (
     <FlatList
-      data={snippetsData}
+      data={data}
       keyExtractor={item => String(item.id)}
       renderItem={renderItemComponent}
       ListEmptyComponent={renderEmptyComponent}
